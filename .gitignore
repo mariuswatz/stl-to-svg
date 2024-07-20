@@ -1,0 +1,10 @@
+.cache
+es
+umd
+lib
+dist
+node_modules
+yarn-error.log
+src/models/*
+.DS_Store
+.idea

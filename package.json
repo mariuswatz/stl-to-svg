@@ -1,0 +1,20 @@
+{
+  "name": "stl-to-svg",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build --watch",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  },
+  "dependencies": {
+    "@amandaghassaei/stl-parser": "^1.7.0",
+    "@lnjs/core": "^0.5.0",
+    "wavefront-obj-parser": "^2.0.1"
+  }
+}
