@@ -1,7 +1,9 @@
 import * as ln from "@lnjs/core";
 import { Path } from "@lnjs/core/lib/path";
 import { Scene } from "@lnjs/core";
-import { getModel } from "./stl-reader";
+import { setupDropHandler } from "./draganddrop";
+
+let uploadedFile: File;
 
 const canvas = <HTMLCanvasElement>document.getElementById("canvas");
 canvas.width = window.innerWidth;
@@ -10,22 +12,19 @@ const ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
 ctx.imageSmoothingEnabled = true;
 ctx.translate(0.5, 0.5);
 
-let models = [
-  "PolyTowerFat03BMulti 001.001.stl",
-  "PolyTowerFat03BMulti 001.001U.stl",
-  "PolyTowerFat03BMulti 001.002.stl",
-  "PolyTowerFat03BMulti 001.002U.stl",
-  "PolyTowerFat03BMulti 001.002.stl",
-  "PolyTowerFat03BMulti 001.002U.stl",
-];
+// models are loaded by dropping STL files onto canvas
+if (canvas) setupDropHandler(canvas, renderMesh);
 
-let filename = models[1];
-getModel(`/src/models/${filename}`, renderMesh);
+// on load, there will be no model
+ctx.font = "24px sans-serif";
+ctx.fillStyle = "#000";
+ctx.fillText("No file loaded. Drag STL file into window.", 20, 30);
 
 function degrees(degrees: number): number {
   return (degrees * 180) / Math.PI;
 }
 
+// Set up eye / venter / up vectors
 let eye = new ln.Vector(-0.5, 0.5, 2);
 eye = new ln.Vector(0, 0.75, 2);
 let center = new ln.Vector(0, 0, 0);
@@ -33,7 +32,9 @@ let up = new ln.Vector(0, 1, 0);
 
 let parsed: ln.Mesh;
 
-function renderMesh(data: ln.Mesh) {
+export function renderMesh(f: File, data: ln.Mesh) {
+  uploadedFile = f;
+
   let rotate = ln.radians(90);
   let mesh = data;
   parsed = data;
@@ -78,7 +79,7 @@ function renderMesh(data: ln.Mesh) {
 
     ctx.fillStyle = "#000";
     ctx.fillText(
-      `${filename} f=${parsed ? parsed.triangles.length : "--"}`,
+      `${uploadedFile.name} f=${parsed ? parsed.triangles.length : "--"}`,
       20,
       30
     );
@@ -114,7 +115,7 @@ function renderMesh(data: ln.Mesh) {
 }
 
 function saveSVG(scene: ln.Scene) {
-  console.log(`SAVE SVG - ${filename}`);
+  console.log(`SAVE SVG - ${uploadedFile.name}`);
   let width = window.innerWidth;
   let height = window.innerHeight;
   let paths = scene.render(eye, center, up, width, height, 100, 0.1, 100, 0.01);
@@ -129,7 +130,7 @@ function saveSVG(scene: ln.Scene) {
     var svgUrl = URL.createObjectURL(svgBlob);
     var downloadLink = document.createElement("a");
     downloadLink.href = svgUrl;
-    downloadLink.download = `${filename}.svg`;
+    downloadLink.download = `${uploadedFile.name}.svg`;
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);

@@ -1,6 +1,20 @@
 import { loadSTL, STLMesh } from "@amandaghassaei/stl-parser";
 import * as ln from "@lnjs/core";
 
+export const getModel = (
+  url: string,
+  file: File,
+  callback: (f: File, mesh: ln.Mesh) => void
+) => {
+  console.log("getModel", url);
+  let stl: STLMesh;
+  loadSTL(url, (mesh: STLMesh) => {
+    console.log("vert", mesh.vertices.length);
+    stl = mesh.mergeVertices();
+    callback(file, getTriangles(stl));
+  });
+};
+
 export const getTriangles = (mesh: STLMesh) => {
   let v: ln.Vector[] = [];
   console.log("face indices", mesh.facesIndices.length);
@@ -35,14 +49,4 @@ export const getTriangles = (mesh: STLMesh) => {
   }
 
   return new ln.Mesh(tri);
-};
-
-export const getModel = (url: string, callback: (mesh: ln.Mesh) => void) => {
-  console.log("getModel", url);
-  let stl: STLMesh;
-  loadSTL(url, (mesh: STLMesh) => {
-    console.log("vert", mesh.vertices.length);
-    stl = mesh.mergeVertices();
-    callback(getTriangles(stl));
-  });
 };
