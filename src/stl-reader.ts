@@ -1,25 +1,40 @@
 import { loadSTL, STLMesh } from "@amandaghassaei/stl-parser";
+import { loadOBJ } from "@lnjs/core";
 import * as ln from "@lnjs/core";
 
-export const getModel = (
+export const getSTLModel = (
   url: string,
   file: File,
   callback: (f: File, mesh: ln.Mesh) => void
 ) => {
-  console.log("getModel", url);
+  console.log("getSTLModel", url);
   let stl: STLMesh;
   loadSTL(url, (mesh: STLMesh) => {
     console.log("vert", mesh.vertices.length);
     stl = mesh.mergeVertices();
-    callback(file, getTriangles(stl));
+    callback(file, getLnMesh(stl));
   });
 };
 
-export const getTriangles = (mesh: STLMesh) => {
+async function fetchFile(path: string): Promise<string> {
+  const obj = await window.fetch(path).then((res) => res.text());
+  return obj;
+}
+
+export const getOBJModel = async (
+  url: string,
+  file: File,
+  callback: (f: File, mesh: ln.Mesh) => void
+) => {
+  console.log("getOBJModel", url);
+  fetchFile(url).then((data) => callback(file, loadOBJ(data)));
+
+  // const obj = await window.fetch(url).then((res) => callback(file, loadOBJ(res.text())))};
+};
+
+export const getLnMesh = (mesh: STLMesh) => {
   let v: ln.Vector[] = [];
-  console.log("face indices", mesh.facesIndices.length);
   let vn = mesh.vertices.length / 3;
-  console.log("merged vert", mesh.vertices.length, vn);
 
   let id = 0;
 
@@ -32,20 +47,17 @@ export const getTriangles = (mesh: STLMesh) => {
       )
     );
   }
-  console.log("v", v.length, v);
-
   let tri: ln.Triangle[] = [];
 
   id = 0;
   vn = mesh.facesIndices.length / 3;
   for (let i = 0; i < vn; i++) {
-    tri.push(
-      new ln.Triangle(
-        v[mesh.facesIndices[id++]],
-        v[mesh.facesIndices[id++]],
-        v[mesh.facesIndices[id++]]
-      )
+    let t = new ln.Triangle(
+      v[mesh.facesIndices[id++]],
+      v[mesh.facesIndices[id++]],
+      v[mesh.facesIndices[id++]]
     );
+    tri.push(t);
   }
 
   return new ln.Mesh(tri);
