@@ -14,12 +14,14 @@ To parse STL files I use [stl-parser](https://github.com/amandaghassaei/stl-pars
 
 # User interface
 
+<img src="https://raw.githubusercontent.com/mariuswatz/stl-to-svg/main/public/stl-to-svg%20screenshot.png" width="800">
+
 To upload a STL / OBJ file, just drag it onto the browser window. The model should load automatically.
 
 The user interface has the following buttons:
 
 - **Save SVG** - Exports render to SVG
-- **Reduce Mesh** - Calculates median triangle area and removes triangles less than 5% of the median
+- **Reduce Mesh** - Calculates median triangle area and removes triangles less than 5% of the median. The logic here could be better, but it does get rid of small and zero-area faces.
 - **+X, -X, +Y, -Y, +Z, -Z** Rotates 90 / -90 degrees around indicated axis. Useful to compensate for model orientation.
 - **Reset rotations** Removes all rotations
 

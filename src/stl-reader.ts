@@ -23,8 +23,6 @@ export const getOBJModel = async (
 ) => {
   console.log("getOBJModel", url);
   fetchFile(url).then((data) => callback(loadOBJ(data)));
-
-  // const obj = await window.fetch(url).then((res) => callback(file, loadOBJ(res.text())))};
 };
 
 export const getLnMesh = (mesh: STLMesh) => {
