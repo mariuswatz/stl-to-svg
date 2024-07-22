@@ -21,6 +21,8 @@ export const setupRenderer = () => {
   ctx = gui.getContext();
   width = ctx.canvas.width;
   height = ctx.canvas.height;
+
+  if (scene) render();
 };
 
 /// Scene and mesh
