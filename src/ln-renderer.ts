@@ -74,7 +74,7 @@ function render() {
 
   scene = new ln.Scene();
   ctx.clearRect(0, 0, width, height);
-  ctx.fillStyle = "#ddffff";
+  ctx.fillStyle = "#f1feff";
   ctx.rect(0, 0, width, height);
   ctx.fill();
 
@@ -89,9 +89,8 @@ function render() {
     mat = mat.rotate(axisVectors[rot.axis], ln.radians(rot.degrees));
   });
   mat = mat.rotate(new ln.Vector(0, 1, 0), rotate);
-  // mesh.transform(mat);
-  // scene.add(mesh);
   scene.add(new ln.TransformedShape(mesh, mat));
+
   let paths = scene.render(eye, center, up, width, height, 35, 0.1, 100, 0.01);
   paths.forEach((path: Path) => {
     ctx.beginPath();

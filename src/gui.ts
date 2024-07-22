@@ -28,16 +28,25 @@ export const setupGUI = () => {
   svgButton.addEventListener("click", (ev) => render.saveSVG());
   guiButtons.push(svgButton);
 
-  const labels = ["Reduce Mesh", "Reset", "+X", "-X", "+Y", "-Y", "+Z", "-Z"];
+  const labels = [
+    "Reduce Mesh",
+    "+X",
+    "-X",
+    "+Y",
+    "-Y",
+    "+Z",
+    "-Z",
+    "Reset rotations",
+  ];
   const actions: { (ev: MouseEvent): void }[] = [];
   actions.push((ev) => render.fixMesh());
-  actions.push((ev) => render.resetRotations());
   actions.push((ev) => render.addRotation({ axis: "X", degrees: 90 }));
   actions.push((ev) => render.addRotation({ axis: "X", degrees: -90 }));
   actions.push((ev) => render.addRotation({ axis: "Y", degrees: 90 }));
   actions.push((ev) => render.addRotation({ axis: "Y", degrees: -90 }));
   actions.push((ev) => render.addRotation({ axis: "Z", degrees: 90 }));
   actions.push((ev) => render.addRotation({ axis: "Z", degrees: -90 }));
+  actions.push((ev) => render.resetRotations());
 
   for (let i = 0; i < labels.length; i++) {
     const tmp = document.createElement("button");
@@ -57,7 +66,7 @@ export const setupGUI = () => {
   ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
   ctx.imageSmoothingEnabled = true;
   //   ctx.translate(0.5, 0.5);
-  ctx.fillStyle = "#ddd";
+  ctx.fillStyle = "#fefefe";
   ctx.rect(0, 0, canvas.width, canvas.height);
   ctx.fill();
 
