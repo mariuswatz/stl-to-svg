@@ -2,17 +2,13 @@ import { loadSTL, STLMesh } from "@amandaghassaei/stl-parser";
 import { loadOBJ } from "@lnjs/core";
 import * as ln from "@lnjs/core";
 
-export const getSTLModel = (
-  url: string,
-  file: File,
-  callback: (f: File, mesh: ln.Mesh) => void
-) => {
+export const getSTLModel = (url: string, callback: (mesh: ln.Mesh) => void) => {
   console.log("getSTLModel", url);
   let stl: STLMesh;
   loadSTL(url, (mesh: STLMesh) => {
     console.log("vert", mesh.vertices.length);
     stl = mesh.mergeVertices();
-    callback(file, getLnMesh(stl));
+    callback(getLnMesh(stl));
   });
 };
 
@@ -23,11 +19,10 @@ async function fetchFile(path: string): Promise<string> {
 
 export const getOBJModel = async (
   url: string,
-  file: File,
-  callback: (f: File, mesh: ln.Mesh) => void
+  callback: (mesh: ln.Mesh) => void
 ) => {
   console.log("getOBJModel", url);
-  fetchFile(url).then((data) => callback(file, loadOBJ(data)));
+  fetchFile(url).then((data) => callback(loadOBJ(data)));
 
   // const obj = await window.fetch(url).then((res) => callback(file, loadOBJ(res.text())))};
 };

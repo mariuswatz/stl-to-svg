@@ -1,13 +1,12 @@
 import { getOBJModel, getSTLModel } from "./stl-reader";
 import * as ln from "@lnjs/core";
+import * as gui from "./gui";
 
-let dropHandlerCallback: (f: File, mesh: ln.Mesh) => void;
-
-export let uploadedFile: File;
+let dropHandlerCallback: (mesh: ln.Mesh) => void;
 
 export const setupDropHandler = (
   canvas: HTMLElement,
-  callback: (f: File, mesh: ln.Mesh) => void
+  callback: (mesh: ln.Mesh) => void
 ) => {
   dropHandlerCallback = callback;
 
@@ -38,14 +37,14 @@ function dropHandler(event: DragEvent) {
           if (file.name.endsWith("stl")) {
             console.log(`… file[${i}].name = ${file?.name}`, file);
             let url = URL.createObjectURL(file);
-            uploadedFile = file;
-            getSTLModel(url, file, dropHandlerCallback);
+            gui.setUploadedFile(file);
+            getSTLModel(url, dropHandlerCallback);
           }
           if (file.name.endsWith("obj")) {
             console.log(`… file[${i}].name = ${file?.name}`, file);
             let url = URL.createObjectURL(file);
-            uploadedFile = file;
-            getOBJModel(url, file, dropHandlerCallback);
+            gui.setUploadedFile(file);
+            getOBJModel(url, dropHandlerCallback);
           }
         }
       }

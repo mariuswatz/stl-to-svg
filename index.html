@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Abel&display=swap"
+      rel="stylesheet"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
     <style>
@@ -10,15 +16,52 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
+        font-family: "Abel", sans-serif;
+        font-weight: 400;
+        font-style: normal;
       }
 
       #svg {
         display: none;
       }
+
+      #menu {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        z-index: 10;
+        width: 100vw;
+        height: 40px;
+        padding: 10px;
+        background-color: #0099ff;
+        display: flex;
+        align-items: center;
+      }
+
+      button {
+        background: #fff;
+        color: #0099ff;
+        border: none;
+        border-radius: 4px;
+        font-family: "Abel", sans-serif;
+        font-size: 15px;
+        margin: 0;
+        padding: 5px 10px;
+        width: auto;
+        margin-right: 20px;
+
+        overflow: visible;
+      }
+
+      button:active {
+        color: #fff;
+        background: #ff9900;
+      }
     </style>
   </head>
 
   <body>
+    <div id="menu"></div>
     <canvas id="canvas"></canvas>
     <div id="svg"></div>
     <script type="module" src="src/main.ts"></script>
