@@ -2,11 +2,8 @@ import * as ln from "@lnjs/core";
 import { Path } from "@lnjs/core/lib/path";
 import { identity, Scene } from "@lnjs/core";
 import * as gui from "./gui";
-import { removeSmallTriangles } from "./ln-mesh-tools";
-
-function degrees(degrees: number): number {
-  return (degrees * 180) / Math.PI;
-}
+import { degrees, removeSmallTriangles } from "./ln-mesh-tools";
+import { modifyMesh } from "./modify-mesh";
 
 let ctx: CanvasRenderingContext2D;
 let width: number, height: number;
@@ -91,6 +88,8 @@ function render() {
     mat = mat.rotate(axisVectors[rot.axis], ln.radians(rot.degrees));
   });
   mat = mat.rotate(new ln.Vector(0, 1, 0), rotate);
+  mesh.unitCube();
+
   scene.add(new ln.TransformedShape(mesh, mat));
 
   let paths = scene.render(eye, center, up, width, height, 35, 0.1, 100, 0.01);
@@ -126,9 +125,14 @@ export const fixMesh = () => {
   render();
 };
 
+export const subdivideMesh = () => {
+  newMesh = new ln.Mesh(modifyMesh(mesh.triangles));
+  render();
+};
+
 window.onkeydown = (e: KeyboardEvent) => {
   let rotMod = e.shiftKey
-    ? ln.radians(15)
+    ? ln.radians(5)
     : e.altKey
     ? ln.radians(90)
     : ln.radians(30);
@@ -136,9 +140,13 @@ window.onkeydown = (e: KeyboardEvent) => {
     saveSVG();
   } else if (e.code == "KeyF") {
     fixMesh();
-    // right arrow
+  } else if (e.code == "KeyD") {
+    // subdivideMesh();
   } else if (e.code == "KeyX") {
     addRotation({ axis: "X", degrees: 90 });
+  } else if (e.code == "KeyR") {
+    if (parsed) newMesh = parsed;
+    render();
   } else if (e.code == "KeyY") {
     addRotation({ axis: "Y", degrees: 90 });
   } else if (e.code == "KeyZ") {

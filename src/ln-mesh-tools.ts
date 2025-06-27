@@ -47,3 +47,23 @@ export function triangleArea(tri: ln.Triangle) {
 
   return v3.cross(v1).length() * 0.5;
 }
+
+export function degrees(degrees: number): number {
+  return (degrees * 180) / Math.PI;
+}
+
+export function angleTo(v1: ln.Vector, v2: ln.Vector) {
+  const denominator = v1.length() * v2.length();
+
+  if (denominator === 0) return Math.PI / 2;
+
+  const theta = v1.dot(v2) / denominator;
+
+  // clamp, to handle numerical problems
+
+  return Math.acos(clamp(theta, -1, 1));
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value));
+}
